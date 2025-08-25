@@ -32,9 +32,9 @@ setup(
     ],
     include_package_data=True,
     scripts=[],
-    url='https://github.com/django-tenants/django-tenants',
+    url='https://github.com/kiwitcms/django-tenants',
     license='MIT',
-    description='Tenant support for Django using PostgreSQL schemas.',
+    description='Tenant support for Kiwi TCMS',
     long_description=io.open('README.rst', encoding='utf-8').read() if exists("README.rst") else "",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
