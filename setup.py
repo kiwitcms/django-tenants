@@ -11,7 +11,7 @@ except ImportError:
 __version__ = "3.8.0"
 
 setup(
-    name='django-tenants',
+    name='kiwitcms-django-tenants',
     version=__version__,
     author='Thomas Turner',
     author_email='tom@twt.me.uk',
