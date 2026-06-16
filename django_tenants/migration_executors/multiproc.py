@@ -68,7 +68,8 @@ class MultiprocessingExecutor(MigrationExecutor):
                 self.codename,
                 len(tenants)
             )
-            p = multiprocessing.Pool(processes=processes)
+            ctx = multiprocessing.get_context("fork")
+            p = ctx.Pool(processes=processes)
             p.map(
                 run_migrations_p,
                 enumerate(tenants),
@@ -101,7 +102,8 @@ class MultiprocessingExecutor(MigrationExecutor):
             self.codename,
             len(tenants)
         )
-        p = multiprocessing.Pool(processes=processes)
+        ctx = multiprocessing.get_context("fork")
+        p = ctx.Pool(processes=processes)
         p.map(
             run_migrations_p,
             enumerate(tenants),
