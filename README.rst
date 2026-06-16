@@ -12,3 +12,17 @@ but we don't want to risk breaking production instances hence the fork!
 
 For the full list of changes between the last known working version and the original 3.8.0 see:
 https://github.com/django-tenants/django-tenants/compare/v3.7.0...v3.7.8
+
+Changelog
+=========
+
+v3.8.2
+------
+
+- Raised the minimum supported Python version to 3.12.
+- Updated the test matrix to Python 3.12 and 3.14, PostgreSQL 17 and 18,
+  and Django 5.2 and 6.0.
+- Fixed ``AppRegistryNotReady: Apps aren't loaded yet`` in the
+  multiprocessing migration executor by explicitly using the ``fork``
+  start method, which is required now that newer Python versions no
+  longer default to ``fork`` on Linux.
