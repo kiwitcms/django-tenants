@@ -16,6 +16,14 @@ https://github.com/django-tenants/django-tenants/compare/v3.7.0...v3.7.8
 Changelog
 =========
 
+
+v3.8.3 (20 Sep 2026)
+--------------------
+
+- Add Django 6.1 support. Cherry-picked from upstream
+  https://github.com/django-tenants/django-tenants/commit/2304f34
+
+
 v3.8.2
 ------
 
