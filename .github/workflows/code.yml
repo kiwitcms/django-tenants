@@ -8,7 +8,7 @@ on:
 jobs:
   postgres_compatibility:
     name: Postgres compatibility ${{ matrix.postgres-version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: true
       matrix: # https://www.postgresql.org/docs/release
@@ -49,7 +49,7 @@ jobs:
 
   django_compatibility:
     name:  Django compatibility ${{ matrix.django-version}} / Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: true
       matrix:
