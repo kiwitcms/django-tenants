@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.management import call_command
+from django.core.exceptions import ValidationError
 from django.db import models, connections, transaction
 from django.urls import reverse
 
@@ -95,6 +96,36 @@ class TenantMixin(models.Model):
         connection = connections[get_tenant_database_alias()]
         connection.set_schema_to_public()
 
+    def _schema_name_changed(self):
+        # _base_manager: not filtered by a custom default manager, and present
+        # even if the model has no manager called 'objects'.
+        stored = (self.__class__._base_manager.using(self._state.db).filter(pk=self.pk)
+                  .values_list('schema_name', flat=True).first())
+        return stored != self.schema_name
+
+    def _check_schema_name_is_unique(self):
+        """
+        Rejects a schema name that only differs in case from an existing tenant's.
+
+        The unique constraint on schema_name is case sensitive, as are PostgreSQL
+        schema names themselves, but django-tenants treats names that differ only
+        in case as the same tenant -- see schema_exists() and schema_rename().
+        Without this check, creating a tenant 'C2' alongside an existing 'c2' is
+        accepted by the database and leaves two tenants fighting over one schema.
+        #846
+
+        Only called when adding a tenant, which is the only way to introduce a
+        collision -- renames go through schema_rename(), which checks for itself.
+        Saves on tenants that already collide are left alone so that upgrading
+        doesn't lock anyone out of their own data. Since the row does not exist
+        yet there is nothing to exclude from the query.
+        """
+        if self.__class__.objects.filter(schema_name__iexact=self.schema_name).exists():
+            raise ValidationError(
+                "A tenant with the schema name '%s' already exists. Schema names are "
+                "compared ignoring case." % self.schema_name
+            )
+
     def save(self, verbosity=1, *args, **kwargs):
         connection = connections[get_tenant_database_alias()]
         is_new = self._state.adding
@@ -106,6 +137,18 @@ class TenantMixin(models.Model):
             raise Exception("Can't update tenant outside it's own schema or "
                             "the public schema. Current schema is %s."
                             % connection.schema_name)
+
+        # A row is inserted when adding, and also when pk has been cleared to
+        # copy an existing tenant (as clone_tenant --clone_tenant_fields does).
+        inserting = is_new or self.pk is None
+        if inserting or self._schema_name_changed():
+            # Validate before the row is written: a name rejected later, in
+            # create_schema(), is cleaned up with delete(force_drop=True), and
+            # dropping a name PostgreSQL truncates could drop another tenant's
+            # schema.
+            _check_schema_name(self.schema_name)
+        if inserting:
+            self._check_schema_name_is_unique()
 
         super().save(*args, **kwargs)
 
@@ -144,6 +187,12 @@ class TenantMixin(models.Model):
             raise Exception("Can't delete tenant outside it's own schema or "
                             "the public schema. Current schema is %s."
                             % connection.schema_name)
+
+        if has_schema and (self.auto_drop_schema or force_drop):
+            # Never drop a schema by an invalid name: PostgreSQL truncates
+            # identifiers to 63 bytes, so DROP SCHEMA on a longer name would drop
+            # whichever schema it truncates to -- possibly another tenant's.
+            _check_schema_name(self.schema_name)
 
         if has_schema and schema_exists(self.schema_name) and (self.auto_drop_schema or force_drop):
             self.pre_drop()
