@@ -41,8 +41,8 @@ class TestValidationUtils(unittest.TestCase):
                     base._check_schema_name(schema_name)
 
     def test_quote_schema_name_escapes_double_quotes(self):
-        self.assertEqual(quote_schema_name('Tenant 1'), '"Tenant 1"')
-        self.assertEqual(quote_schema_name('a"b'), '"a""b"')
+        self.assertEqual(quote_schema_name('Tenant 1').as_string(None), '"Tenant 1"')
+        self.assertEqual(quote_schema_name('a"b').as_string(None), '"a""b"')
 
     def test_quote_schema_name_rejects_nul(self):
         with self.assertRaises(ValidationError):
