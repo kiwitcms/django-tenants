@@ -5,6 +5,10 @@ on:
   push:
     branches: master
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   postgres_compatibility:
     name: Postgres compatibility ${{ matrix.postgres-version }}
