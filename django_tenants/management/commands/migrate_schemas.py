@@ -2,7 +2,7 @@ from django.db.migrations.autodetector import MigrationAutodetector
 
 from django_tenants.migration_executors import get_executor
 from django_tenants.utils import get_tenant_model, get_public_schema_name, schema_exists, get_tenant_database_alias, \
-    has_multi_type_tenants, get_multi_type_database_field_name, get_tenant_migration_order
+    get_tenant_migration_order
 from django_tenants.management.commands import SyncCommon
 from django.utils.module_loading import import_string
 from django.conf import settings
@@ -69,38 +69,21 @@ class MigrateSchemasCommand(SyncCommon):
                 if not schema_exists(self.schema_name, self.options.get('database', None)):
                     raise RuntimeError('Schema "{}" does not exist'.format(
                         self.schema_name))
-                elif has_multi_type_tenants():
-                    type_field_name = get_multi_type_database_field_name()
-                    tenants = get_tenant_model().objects.only('schema_name', type_field_name)\
-                        .filter(schema_name=self.schema_name)\
-                        .values_list('schema_name', type_field_name)
-                    executor.run_multi_type_migrations(tenants=tenants)
                 else:
                     tenants = [self.schema_name]
                     executor.run_migrations(tenants=tenants)
             else:
                 migration_order = get_tenant_migration_order()
 
-                if has_multi_type_tenants():
-                    type_field_name = get_multi_type_database_field_name()
-                    tenants = get_tenant_model().objects.only('schema_name', type_field_name)\
-                        .exclude(schema_name=self.PUBLIC_SCHEMA_NAME)\
-                        .values_list('schema_name', type_field_name)
+                tenants = get_tenant_model().objects.only(
+                    'schema_name').exclude(
+                    schema_name=self.PUBLIC_SCHEMA_NAME).values_list(
+                    'schema_name', flat=True)
 
-                    if migration_order is not None:
-                        tenants = tenants.order_by(*migration_order)
+                if migration_order is not None:
+                    tenants = tenants.order_by(*migration_order)
 
-                    executor.run_multi_type_migrations(tenants=tenants)
-                else:
-                    tenants = get_tenant_model().objects.only(
-                        'schema_name').exclude(
-                        schema_name=self.PUBLIC_SCHEMA_NAME).values_list(
-                        'schema_name', flat=True)
-
-                    if migration_order is not None:
-                        tenants = tenants.order_by(*migration_order)
-
-                    executor.run_migrations(tenants=tenants)
+                executor.run_migrations(tenants=tenants)
 
 
 Command = MigrateSchemasCommand
