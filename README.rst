@@ -23,6 +23,18 @@ Changelog
 =========
 
 
+v3.8.5 (14 Nov 2026)
+--------------------
+
+- Security: backport from upstream v4.0.2. See
+  `GHSA-xpxg-j6jm-rp27 <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-xpxg-j6jm-rp27>`_
+- Security: backport from upstream v4.0.3. See
+  `GHSA-6j59-h5h9-h29f <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-6j59-h5h9-h29f>`_
+- Security: backport from upstream v4.0.4. See
+  `GHSA-492h-rq3v-xf2h <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-492h-rq3v-xf2h>`_
+- Schema names are now restricted to Kiwi TCMS' ``^[a-z0-9]{1,63}$`` rule
+
+
 v3.8.4 (14 Nov 2026)
 --------------------
 
