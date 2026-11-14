@@ -54,10 +54,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_FILE_STORAGE = "django_tenants.files.storage.TenantFileSystemStorage"
 
-MULTITENANT_TEMPLATE_DIRS = [
-    os.path.join(TENANT_APPS_DIR, "tenants/%s/templates")
-]
-
 TENANT_MODEL = "customers.Client"  # app.Model
 
 TENANT_DOMAIN_MODEL = "customers.Domain"  # app.Model
