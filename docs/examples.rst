@@ -8,7 +8,7 @@ This app comes with an interactive tutorial to teach you how to use ``django-ten
 
 .. code-block:: bash
 
-    ./manage.py runserver 
+    ./manage.py runserver
 
 All other steps will be explained by following the tutorial, just open ``http://127.0.0.1:8000`` on your browser.
 

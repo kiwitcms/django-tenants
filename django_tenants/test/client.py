@@ -31,8 +31,8 @@ class TenantClient(BaseTenantRequestFactory, Client):
         request = HttpRequest()
         request.META['HTTP_HOST'] = self.tenant.get_primary_domain().domain
         request.tenant = self.tenant
-        
-        # Authenticate using django contrib's authenticate which passes the request on 
+
+        # Authenticate using django contrib's authenticate which passes the request on
         # to custom backends
 
         user = authenticate(request, **credentials)

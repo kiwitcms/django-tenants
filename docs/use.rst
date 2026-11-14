@@ -50,7 +50,7 @@ Any call to the methods ``filter``, ``get``, ``save``, ``delete`` or any other f
 Deleting a tenant
 -----------------
 
-You can delete tenants by just deleting the entry via the Django ORM. There is a flag that can set on the tenant model called ``auto_drop_schema``. The default for ``auto_drop_schema`` is False. 
+You can delete tenants by just deleting the entry via the Django ORM. There is a flag that can set on the tenant model called ``auto_drop_schema``. The default for ``auto_drop_schema`` is False.
 
 WARNING SETTING ``AUTO_DROP_SCHEMA`` TO TRUE WILL DELETE THE SCHEMA WITH THE TENANT!
 
@@ -109,7 +109,7 @@ You can also use `tenant_context` as a decorator.
 
 .. function:: @tenant_migration
 
-This decorator allows the flexibility to have data migrations (using ``migrations.RunPython``) execute specifically under a tenant or public schema for apps in both tenant/public INSTALLED_APPS. 
+This decorator allows the flexibility to have data migrations (using ``migrations.RunPython``) execute specifically under a tenant or public schema for apps in both tenant/public INSTALLED_APPS.
 It accepts boolean kwargs ``tenant_schema`` or ``public_schema`` - the default beign ``tenant_schema=True`` and ``public_schema=False``.
 
 .. code-block:: python
@@ -285,7 +285,7 @@ Custom command example:
 
     from django_tenants.management.commands import BaseTenantCommand
     # rest of your imports
-    
+
     class Command(BaseTenantCommand):
         COMMAND_NAME = 'awesome command'
         # rest of your command
@@ -336,14 +336,14 @@ To exlclude running migration on the public do the following
 .. code-block:: bash
 
     ./manage.py migrate_schemas --tenant
- 
+
 
 To run only migration only on a single tenant run the following.
 
 .. code-block:: bash
-    
+
     python manage.py migrate --schema="demo"
-    
+
 
 
 migrate_schemas in Parallel
@@ -490,7 +490,7 @@ The command ``create_domain`` adds a domain to an existing tenant.
 
 .. code-block:: bash
 
-    ./manage.py create_domain     
+    ./manage.py create_domain
     ./manage.py create_domain --schema_name=tenant1 --domain-domain=tenant1.my-domain.com
     ./manage.py create_domain -s=tenant1 -d=tenant1.my-domain.com --is_primary=True --no-input
 
@@ -501,7 +501,7 @@ The command ``delete_domain`` deletes a domain on a tenant.
 
 .. code-block:: bash
 
-    ./manage.py delete_domain     
+    ./manage.py delete_domain
     ./manage.py delete_domain --schema_name=tenant1 --domain-domain=tenant1.my-domain.com
     ./manage.py delete_domain -s=tenant1 -d=tenant1.my-domain.com
 

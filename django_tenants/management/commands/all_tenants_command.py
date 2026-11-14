@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         super().add_arguments(parser)
-           
+
         parser.add_argument('--no-public', nargs='?', const=True, default=False, help='Exclude the public schema')
         parser.add_argument('command_name', nargs='+', help='The command name you want to run')
 
@@ -23,13 +23,13 @@ class Command(BaseCommand):
         # load the command object.
         if len(argv) <= 2:
             return
-        
+
         no_public = "--no-public" in argv
-        
+
         command_args = [argv[0]]
-        
+
         command_args.extend(argv[3:] if no_public else argv[2:])
-        
+
         try:
             app_name = get_commands()[command_args[1]]
         except KeyError:
@@ -53,4 +53,3 @@ class Command(BaseCommand):
             self.stdout.write("Applying command to: %s" % tenant.schema_name)
             connection.set_tenant(tenant)
             klass.run_from_argv(args)
-

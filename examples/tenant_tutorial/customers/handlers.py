@@ -32,4 +32,3 @@ def check_post_schema_sync(**kwargs):
     client = kwargs['tenant']
     print('------------------')
     print('check_post_schema_sync')
-
