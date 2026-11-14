@@ -1,17 +1,23 @@
 kiwitcms-django-tenants
 =======================
 
-This is a fork of https://github.com/django-tenants/django-tenants at version 3.8.0,
+This is a lean fork of https://github.com/django-tenants/django-tenants
+started at version 3.8.0,
 https://github.com/django-tenants/django-tenants/releases/tag/v3.7.8, commit 7d82923.
 
 It reverts the changes made in
 https://github.com/django-tenants/django-tenants/pull/997 b/c they cause existing
-Kiwi TCMS tests to fail and appear to be much more disruptive than what appears initially!
-Kiwi TCMS needs the rest of the changes in order to become compatible with Django 5.2,
-but we don't want to risk breaking production instances hence the fork!
+Kiwi TCMS tests to fail, https://github.com/django-tenants/django-tenants/issues/1155,
+and appear to be much more disruptive than what appears initially!
 
-For the full list of changes between the last known working version and the original 3.8.0 see:
-https://github.com/django-tenants/django-tenants/compare/v3.7.0...v3.7.8
+This fork also removes any upstream functionality which isn't consumed in Kiwi TCMS
+and focuses on maintainability!
+
+Originally Kiwi TCMS needed the rest of the changes in order to become compatible with
+Django 5.2, but we didn't want to risk breaking production instances hence the fork!
+Since then it has taken a life of its own and is only fit as a building block for
+https://github.com/kiwitcms/tenants/!
+
 
 Changelog
 =========
