@@ -42,11 +42,10 @@ setup(
         'Framework :: Django :: 6.0',
         'Framework :: Django :: 6.1',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.12',
         'Programming Language :: Python :: 3.14',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    python_requires='>=3.12',
+    python_requires='>=3.14',
     install_requires=[
         'Django >=5.2',
     ],
