@@ -13,5 +13,3 @@ class Command(BaseCommand):
         print(options['id'])
         table_two = TableTwo.objects.filter(pk__in=options['id'])
         print(table_two)
-
-

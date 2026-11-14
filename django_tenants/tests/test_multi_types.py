@@ -155,5 +155,3 @@ class MultiTypeTestCase(BaseTestCase):
     #     with tenant_context(self.tenant):
     #         put the correct exception her
     #         TypeTwoOnly(name='hello')
-
-

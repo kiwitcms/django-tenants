@@ -50,7 +50,7 @@ def run_migrations(args, options, executor_codename, schema_name, tenant_type=''
     migration_recorder = MigrationRecorder(connection)
     migration_recorder.ensure_schema()
     connection.set_schema(schema_name, tenant_type=tenant_type)
-                       
+
     stdout = OutputWrapper(sys.stdout)
     stdout.style_func = style_func
     stderr = OutputWrapper(sys.stderr)

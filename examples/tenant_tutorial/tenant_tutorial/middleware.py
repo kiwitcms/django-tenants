@@ -12,4 +12,3 @@ class TenantTutorialMiddleware(TenantMainMiddleware):
             return
         else:
             raise Http404
-

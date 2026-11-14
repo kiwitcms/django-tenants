@@ -316,7 +316,7 @@ def validate_extra_extensions():
 def tenant_migration(*args, tenant_schema=True, public_schema=False):
     """
     Decorator to control which schemas a data migration will execute on.
-    
+
     :param tenant_schema: If True (default), the data migration will execute on the tenant schema(s).
     :param public_schema: If True, the data migration will execute on the public schema.
 

@@ -145,4 +145,3 @@ There are some extra methods that you can use for ``FastTenantTestCase``. They a
             @classmethod
             def use_new_tenant(cls):
                 pass
-

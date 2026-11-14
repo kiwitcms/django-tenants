@@ -67,4 +67,3 @@ class TenantViewFileUploadCreate(CreateView):
         context['tenants_list'] = Client.objects.all()
         context['upload_files'] = UploadFile.objects.all()
         return context
-
