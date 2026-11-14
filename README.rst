@@ -23,6 +23,23 @@ Changelog
 =========
 
 
+v3.8.4 (14 Nov 2026)
+--------------------
+
+- Security: escape schema names in all generated SQL using psycopg's
+  ``sql.Identifier``/``sql.SQL`` composition and restore the
+  introspection ``search_path`` verbatim from ``SHOW search_path``
+- Security: schema-name validation rejects double and single quotes,
+  backslashes, semicolons, line breaks and NUL, matching upstream v4.0.1. See
+  `GHSA-693j-7v9f-x7pw <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-693j-7v9f-x7pw>`_
+- Remove multi-type tenant support not used in Kiwi TCMS
+- Remove middleware not used in Kiwi TCMS
+- Remove staticfiles module not used in Kiwi TCMS
+- Remove template loaders not used in Kiwi TCMS
+- Remove deprecated and unused ``django_tenants.files.storages``
+- Removed the psycopg2 fallback; psycopg 3 is required
+
+
 v3.8.3 (20 Sep 2026)
 --------------------
 
