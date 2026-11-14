@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.test.client import RequestFactory
 
 from django_tenants.middleware import TenantMainMiddleware

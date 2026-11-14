@@ -8,7 +8,7 @@ from django.utils.functional import lazy
 from django_tenants.utils import (
     get_tenant_domain_model,
     get_subfolder_prefix,
-    clean_tenant_url, has_multi_type_tenants, get_tenant_types,
+    clean_tenant_url,
 )
 
 
@@ -91,10 +91,7 @@ def get_subfolder_urlconf(tenant):
     """
     Creates and returns a subfolder URLConf for tenant.
     """
-    if has_multi_type_tenants():
-        urlconf = get_tenant_types()[tenant.get_tenant_type()]['URLCONF']
-    else:
-        urlconf = settings.ROOT_URLCONF
+    urlconf = settings.ROOT_URLCONF
     dynamic_path = urlconf + "_dynamically_tenant_prefixed"
     if not sys.modules.get(dynamic_path):
         sys.modules[dynamic_path] = get_dynamic_tenant_prefixed_urlconf(urlconf, dynamic_path)

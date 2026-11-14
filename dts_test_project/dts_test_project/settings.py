@@ -42,7 +42,6 @@ SHARED_APPS = (
 
 TENANT_APPS = (
     'dts_test_app',
-    'dts_multi_type2',
 )
 
 TENANT_APPS_DIR = os.path.join(BASE_DIR, TENANT_APPS[0])

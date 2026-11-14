@@ -12,7 +12,7 @@ from django_tenants.utils import (
 )
 
 
-def run_migrations(args, options, executor_codename, schema_name, tenant_type='',
+def run_migrations(args, options, executor_codename, schema_name,
                    allow_atomic=True, idx=None, count=None):
     from django.core.management import color
     from django.core.management.base import OutputWrapper
@@ -42,14 +42,14 @@ def run_migrations(args, options, executor_codename, schema_name, tenant_type=''
     schema_pre_migration.send(run_migrations, schema_name=schema_name)
 
     connection = connections[options.get('database', get_tenant_database_alias())]
-    connection.set_schema(schema_name, tenant_type=tenant_type, include_public=False)
+    connection.set_schema(schema_name, include_public=False)
 
     # ensure that django_migrations table is created in the schema before migrations run, otherwise the migration
     # table in the public schema gets picked and no migrations are applied.   For psycopg3, need to explicitly
     # set include_public to false during schema check
     migration_recorder = MigrationRecorder(connection)
     migration_recorder.ensure_schema()
-    connection.set_schema(schema_name, tenant_type=tenant_type)
+    connection.set_schema(schema_name)
 
     stdout = OutputWrapper(sys.stdout)
     stdout.style_func = style_func
@@ -86,7 +86,4 @@ class MigrationExecutor:
         self.TENANT_DB_ALIAS = get_tenant_database_alias()
 
     def run_migrations(self, tenants=None):
-        raise NotImplementedError
-
-    def run_multi_type_migrations(self, tenants):
         raise NotImplementedError

@@ -225,13 +225,6 @@ class TenantMixin(models.Model):
 
         return url
 
-    def get_tenant_type(self):
-        """
-        Get the type of tenant. Will only work for multi type tenants
-        :return: str
-        """
-        return getattr(self, settings.MULTI_TYPE_DATABASE_FIELD)
-
 
 class DomainMixin(models.Model):
     """
