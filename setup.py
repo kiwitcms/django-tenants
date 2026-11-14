@@ -8,7 +8,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "3.8.4"
+__version__ = "3.8.5"
 
 setup(
     name='kiwitcms-django-tenants',
