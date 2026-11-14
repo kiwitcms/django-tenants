@@ -1237,4 +1237,3 @@ class SchemaAdoptionTest(BaseTestCase):
             schema_rename(tenant, 'rename_nosave_b', save=False)
             tenant.save()
         self.assertEqual(get_tenant_model().objects.get(pk=tenant.pk).schema_name, 'rename_nosave_b')
-
