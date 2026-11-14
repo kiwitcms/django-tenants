@@ -104,3 +104,26 @@ jobs:
       with:
         fail_ci_if_error: true
         verbose: true
+
+  build-package:
+    name: Build package
+    runs-on: ubuntu-26.04
+    strategy:
+      matrix:
+        python-version: [3.14]
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v7
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Build me
+      run: |
+        pip install -U pip setuptools wheel twine
+
+        make package
