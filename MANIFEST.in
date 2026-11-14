@@ -3,8 +3,6 @@ include LICENSE
 include README.rst
 include *.txt
 
-include version.py
-include VERSION
 recursive-include dts_test_project *
 recursive-include django_tenants/templates *.html
 
