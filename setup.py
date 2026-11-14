@@ -27,7 +27,6 @@ setup(
         'django_tenants.templatetags',
         'django_tenants.test',
         'django_tenants.tests',
-        'django_tenants.staticfiles',
         'django_tenants.middleware',
     ],
     include_package_data=True,

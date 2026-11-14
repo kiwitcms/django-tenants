@@ -52,11 +52,6 @@ STATICFILES_DIRS = [
     os.path.join(TENANT_APPS_DIR, "static")
 ]
 
-MULTITENANT_STATICFILES_DIRS = [
-    os.path.join(TENANT_APPS_DIR, "tenants/%s/static")
-]
-
-STATICFILES_STORAGE = "django_tenants.staticfiles.storage.TenantStaticFilesStorage"
 DEFAULT_FILE_STORAGE = "django_tenants.files.storage.TenantFileSystemStorage"
 
 MULTITENANT_TEMPLATE_DIRS = [
