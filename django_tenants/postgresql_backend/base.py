@@ -11,15 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 import django.db.utils
 
-try:
-     from django.db.backends.postgresql.psycopg_any import is_psycopg3
-except ImportError:
-    is_psycopg3 = False
+import psycopg
 
-if is_psycopg3:
-    import psycopg
-else:
-    import psycopg2 as psycopg
 
 
 DatabaseError = django.db.utils.DatabaseError
@@ -154,12 +147,9 @@ class DatabaseWrapper(original_backend.DatabaseWrapper):
 
             search_paths = self._get_cursor_search_paths()
 
-            if name or is_psycopg3:
-                # Named cursor can only be used once, psycopg3 and Django 4 have recursion issue
-                cursor_for_search_path = self.connection.cursor()
-            else:
-                # Reuse
-                cursor_for_search_path = cursor
+            # Named cursor can only be used once and Django 4 has a recursion
+            # issue, so always open a separate cursor for the search path.
+            cursor_for_search_path = self.connection.cursor()
 
             # In the event that an error already happened in this transaction and we are going
             # to rollback we should just ignore database error when setting the search_path
@@ -172,8 +162,7 @@ class DatabaseWrapper(original_backend.DatabaseWrapper):
                 self.search_path_set_schemas = None
             else:
                 self.search_path_set_schemas = search_paths
-            if name or is_psycopg3:
-                cursor_for_search_path.close()
+            cursor_for_search_path.close()
         return cursor
 
     def _get_cursor_search_paths(self):
