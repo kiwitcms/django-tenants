@@ -3,7 +3,6 @@ include LICENSE
 include README.rst
 include *.txt
 
-recursive-include dts_test_project *
 recursive-include django_tenants/templates *.html
 
 # exclude all bytecode
