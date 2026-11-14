@@ -49,5 +49,5 @@ PYTHONWARNINGS=d python manage.py create_tenant --noinput \
 greenprint "Execute clone_tenant"
 PYTHONWARNINGS=d python manage.py clone_tenant \
     --clone_from empty --clone_tenant_fields False \
-    --schema_name a-cloned-tenant --name "A cloned tenant" --description "This tenant was created by cloning" \
-    --type type1 --domain-domain a-cloned-tenant.example.com --domain-is_primary True
+    --schema_name aclonedtenant --name "A cloned tenant" --description "This tenant was created by cloning" \
+    --type type1 --domain-domain aclonedtenant.example.com --domain-is_primary True
