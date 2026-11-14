@@ -16,6 +16,8 @@ except ImportError:
 
 from django.core import mail
 
+from psycopg import sql
+
 
 def get_tenant_model():
     return get_model(settings.TENANT_MODEL)
@@ -169,7 +171,7 @@ def quote_schema_name(schema_name):
     """
     if '\x00' in schema_name:
         raise ValidationError("Invalid string used for the schema name.")
-    return '"{}"'.format(schema_name.replace('"', '""'))
+    return sql.Identifier(schema_name)
 
 
 def schema_exists(schema_name, database=get_tenant_database_alias()):
@@ -203,9 +205,12 @@ def schema_rename(tenant, new_schema_name, database=get_tenant_database_alias(),
         raise ValidationError("New schema name already exists")
     if not is_valid_schema_name(new_schema_name):
         raise ValidationError("Invalid string used for the schema name.")
-    sql = 'ALTER SCHEMA {0} RENAME TO {1}'.format(quote_schema_name(tenant.schema_name),
-                                                  quote_schema_name(new_schema_name))
-    cursor.execute(sql)
+    cursor.execute(
+        sql.SQL('ALTER SCHEMA {0} RENAME TO {1}').format(
+            quote_schema_name(tenant.schema_name),
+            quote_schema_name(new_schema_name),
+        )
+    )
     cursor.close()
     tenant.schema_name = new_schema_name
     if save:

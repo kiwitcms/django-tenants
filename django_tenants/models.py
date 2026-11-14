@@ -4,6 +4,8 @@ from django.core.management import call_command
 from django.db import models, connections, transaction
 from django.urls import reverse
 
+from psycopg import sql
+
 from django_tenants.clone import CloneSchema
 from .postgresql_backend.base import _check_schema_name
 from .signals import post_schema_sync, schema_needs_to_be_sync
@@ -146,7 +148,11 @@ class TenantMixin(models.Model):
         if has_schema and schema_exists(self.schema_name) and (self.auto_drop_schema or force_drop):
             self.pre_drop()
             cursor = connection.cursor()
-            cursor.execute('DROP SCHEMA %s CASCADE' % quote_schema_name(self.schema_name))
+            cursor.execute(
+                sql.SQL('DROP SCHEMA {0} CASCADE').format(
+                    quote_schema_name(self.schema_name)
+                )
+            )
 
     def pre_drop(self):
         """
@@ -195,7 +201,11 @@ class TenantMixin(models.Model):
                              verbosity=verbosity)
             else:
                 # create the schema
-                cursor.execute('CREATE SCHEMA %s' % quote_schema_name(self.schema_name))
+                cursor.execute(
+                    sql.SQL('CREATE SCHEMA {0}').format(
+                        quote_schema_name(self.schema_name)
+                    )
+                )
                 call_command('migrate_schemas',
                              tenant=True,
                              schema_name=self.schema_name,
