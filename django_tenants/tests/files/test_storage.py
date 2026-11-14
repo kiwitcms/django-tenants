@@ -1,16 +1,12 @@
 import os
 import shutil
 import tempfile
-import warnings
 
 from django.db import connection
 from django.core.files.base import ContentFile
 
 from django_tenants import utils
 from django_tenants.files.storage import TenantFileSystemStorage
-from django_tenants.files.storages import (
-    TenantFileSystemStorage as OldTenantFileSystemStorage,
-)
 from django_tenants.tests.testcases import BaseTestCase
 
 
@@ -29,16 +25,6 @@ class TenantFileSystemStorageTestCase(BaseTestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
         shutil.rmtree(self.temp_dir2)
-
-    def test_deprecated_module_raises_warning(self):
-        with warnings.catch_warnings(record=True) as warns:
-            deprecation_warning = (
-                "TenantFileSystemStorage has been moved from django_tenants.files.storages "
-                "to django_tenants.files.storage."
-            )
-
-            OldTenantFileSystemStorage()
-            self.assertTrue(any(deprecation_warning in str(w.message) for w in warns))
 
     def test_file_path(self):
         """
