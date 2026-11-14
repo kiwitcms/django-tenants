@@ -23,7 +23,7 @@ class InvalidHostname(FastTenantTestCase):
 
     @classmethod
     def get_test_schema_name(cls):
-        return '_'
+        return 'invalidhostname'
 
     def setUp(self):
         super().setUp()

@@ -125,7 +125,7 @@ class FastTenantTestCase(TenantTestCase):
 
     @classmethod
     def get_test_schema_name(cls):
-        return 'fast_test'
+        return 'fasttest'
 
     @classmethod
     def setup_test_tenant_and_domain(cls):

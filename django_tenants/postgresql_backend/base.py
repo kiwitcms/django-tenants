@@ -31,25 +31,11 @@ if EXTRA_SET_TENANT_METHOD_PATH:
 else:
     EXTRA_SET_TENANT_METHOD = None
 
-# Valid PostgreSQL schema name regex
-# Criteria:
-#  1. Cannot start with 'pg_'
-#  2. Can be any valid character, if quoted -- except quotes, backslashes,
-#     line breaks,
-#     semicolons and NUL. Schema names are always quoted when they reach SQL,
-#     but they are also interpolated into the clone_schema() SQL function, so
-#     reject anything that could break out of a quoted name or end a statement.
-#  3. Cannot contain '/' and cannot be '.' or '..'. The schema name is also used
-#     as a directory name for tenant media, static files and templates (see
-#     parse_tenant_config_path), so it must not be able to traverse paths.
-#  4. Must be between 1 and 63 characters long, and at most 63 bytes once
-#     encoded as UTF-8 (checked in is_valid_schema_name). PostgreSQL silently
-#     truncates identifiers to 63 bytes, so a longer name made of multi-byte
-#     characters would become another tenant's schema name.
+# Valid schema name regex -- Kiwi TCMS fork policy
 #
-# Reference:
-# https://www.postgresql.org/docs/13/sql-createschema.html
-PGSQL_VALID_SCHEMA_NAME = re.compile(r'^(?!pg_)(?!\.{1,2}\Z)[^"\'\\/;\x00\r\n]{1,63}\Z', re.IGNORECASE)
+# This fork is intentionally stricter because for kiwitcms/tenants
+# schema_name must also be valid DNS label.
+PGSQL_VALID_SCHEMA_NAME = re.compile(r'^[a-z0-9]{1,63}\Z', re.IGNORECASE)
 
 
 # PostgreSQL's NAMEDATALEN - 1. Identifiers longer than this are truncated.
