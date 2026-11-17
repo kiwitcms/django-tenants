@@ -15,7 +15,7 @@ from .signals import post_schema_sync, schema_needs_to_be_sync
 from .utils import get_creation_fakes_migrations, get_tenant_base_schema
 from .utils import get_reject_existing_schema, get_reserved_schema_names
 from .utils import schema_exists, get_tenant_domain_model, get_public_schema_name, get_tenant_database_alias
-from .utils import quote_schema_name
+from .utils import quote_schema_name, _previous_tenants, _restore_previous_tenant
 
 
 class TenantMixin(models.Model):
@@ -48,8 +48,6 @@ class TenantMixin(models.Model):
     Leave this as None. Stores the subfolder in subfolder routing was used
     """
 
-    _previous_tenant = []
-
     class Meta:
         abstract = True
 
@@ -66,15 +64,18 @@ class TenantMixin(models.Model):
             # run some code in previous tenant (public probably)
         """
         connection = connections[get_tenant_database_alias()]
-        self._previous_tenant.append(connection.tenant)
+        previous_tenant = connection.tenant
         self.activate()
+        # Kept on the connection, which is per thread, so concurrent requests
+        # and different tenant instances never share it.
+        _previous_tenants(connection).append(previous_tenant)
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         connection = connections[get_tenant_database_alias()]
 
-        connection.set_tenant(self._previous_tenant.pop())
+        _restore_previous_tenant(connection)
 
     def activate(self):
         """
