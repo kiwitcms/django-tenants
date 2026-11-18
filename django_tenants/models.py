@@ -295,33 +295,37 @@ class TenantMixin(models.Model):
 
         fake_migrations = get_creation_fakes_migrations()
 
-        if sync_schema:
-            if fake_migrations:
-                # copy tables and data from provided model schema
-                base_schema = get_tenant_base_schema()
-                clone_schema = CloneSchema()
-                clone_schema.clone_schema(base_schema, self.schema_name)
+        try:
+            if sync_schema:
+                if fake_migrations:
+                    # copy tables and data from provided model schema
+                    base_schema = get_tenant_base_schema()
+                    clone_schema = CloneSchema()
+                    clone_schema.clone_schema(base_schema, self.schema_name)
 
-                call_command('migrate_schemas',
-                             tenant=True,
-                             fake=True,
-                             schema_name=self.schema_name,
-                             interactive=False,
-                             verbosity=verbosity)
-            else:
-                # create the schema
-                cursor.execute(
-                    sql.SQL('CREATE SCHEMA {0}').format(
-                        quote_schema_name(self.schema_name)
+                    call_command('migrate_schemas',
+                                 tenant=True,
+                                 fake=True,
+                                 schema_name=self.schema_name,
+                                 interactive=False,
+                                 verbosity=verbosity)
+                else:
+                    # create the schema
+                    cursor.execute(
+                        sql.SQL('CREATE SCHEMA {0}').format(
+                            quote_schema_name(self.schema_name)
+                        )
                     )
-                )
-                call_command('migrate_schemas',
-                             tenant=True,
-                             schema_name=self.schema_name,
-                             interactive=False,
-                             verbosity=verbosity)
-
-        connection.set_schema_to_public()
+                    call_command('migrate_schemas',
+                                 tenant=True,
+                                 schema_name=self.schema_name,
+                                 interactive=False,
+                                 verbosity=verbosity)
+        finally:
+            # Also after a failure: migrating leaves the connection on the new
+            # schema, and the failed-create cleanup must delete the tenant's
+            # row from the public schema.
+            connection.set_schema_to_public()
 
     def get_primary_domain(self):
         """
