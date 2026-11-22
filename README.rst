@@ -22,6 +22,12 @@ https://github.com/kiwitcms/tenants/!
 Changelog
 =========
 
+v3.8.2026112201 (22 Nov 2026)
+-----------------------------
+
+- Remove unused ``--db-user`` option in ``clone_tenant`` command
+- Call ``super()`` in tenant test case setup and teardown
+
 
 v3.8.5 (14 Nov 2026)
 --------------------
