@@ -199,8 +199,13 @@ class DatabaseWrapper(original_backend.DatabaseWrapper):
         # if the next instruction is not a rollback it will just fail also, so
         # we do not have to worry that it's not the good one
         try:
-            formatted_search_paths = ['\'{}\''.format(s) for s in search_paths]
-            cursor_for_search_path.execute('SET search_path = {0}'.format(','.join(formatted_search_paths)))
+            cursor_for_search_path.execute(
+                sql.SQL('SET search_path = {0}').format(
+                    sql.SQL(', ').join(
+                        quote_schema_name(name) for name in search_paths
+                    )
+                )
+            )
         except (django.db.utils.DatabaseError, psycopg.InternalError):
             self.search_path_set_schemas = None
         else:
