@@ -1191,8 +1191,8 @@ class TenantDataChangeGuardTest(BaseTestCase):
         super().setUp()
         connection.set_schema_to_public()
         Tenant, Domain = get_tenant_model(), get_tenant_domain_model()
-        self.t1 = Tenant(schema_name='guard_one')
-        self.t2 = Tenant(schema_name='guard_two')
+        self.t1 = Tenant(schema_name='guardone')
+        self.t2 = Tenant(schema_name='guardtwo')
         for tenant in (self.t1, self.t2):
             tenant.auto_create_schema = False
             tenant.save()
@@ -1202,8 +1202,8 @@ class TenantDataChangeGuardTest(BaseTestCase):
 
     def _cleanup(self):
         connection.set_schema_to_public()
-        get_tenant_domain_model().objects.filter(tenant__schema_name__in=['guard_one', 'guard_two']).delete()
-        get_tenant_model().objects.filter(schema_name__in=['guard_one', 'guard_two']).delete()
+        get_tenant_domain_model().objects.filter(tenant__schema_name__in=['guardone', 'guardtwo']).delete()
+        get_tenant_model().objects.filter(schema_name__in=['guardone', 'guardtwo']).delete()
 
     def _as_t1(self):
         connection.set_schema(self.t1.schema_name)
@@ -1306,24 +1306,24 @@ class TenantAdminMixinTest(BaseTestCase):
 
         self.admin = ClientAdmin()
         connection.set_schema_to_public()
-        self.t1 = get_tenant_model()(schema_name='admin_one')
-        self.t2 = get_tenant_model()(schema_name='admin_two')
+        self.t1 = get_tenant_model()(schema_name='adminone')
+        self.t2 = get_tenant_model()(schema_name='admintwo')
         for tenant in (self.t1, self.t2):
             tenant.auto_create_schema = False
             tenant.save()
         self.addCleanup(lambda: (connection.set_schema_to_public(), get_tenant_model().objects.filter(
-            schema_name__in=['admin_one', 'admin_two']).delete()))
+            schema_name__in=['adminone', 'admintwo']).delete()))
 
     def test_public_admin_is_unchanged(self):
         names = set(self.admin.get_queryset(None).values_list('schema_name', flat=True))
-        self.assertTrue({'admin_one', 'admin_two'} <= names)
+        self.assertTrue({'adminone', 'admintwo'} <= names)
         self.assertTrue(self.admin.has_add_permission(None))
         self.assertTrue(self.admin.has_delete_permission(None))
         self.assertTrue(self.admin.has_delete_permission(None, self.t2))
 
     def test_tenant_admin_sees_and_deletes_only_itself(self):
-        connection.set_schema('admin_one')
-        self.assertEqual(list(self.admin.get_queryset(None).values_list('schema_name', flat=True)), ['admin_one'])
+        connection.set_schema('adminone')
+        self.assertEqual(list(self.admin.get_queryset(None).values_list('schema_name', flat=True)), ['adminone'])
         self.assertFalse(self.admin.has_add_permission(None))
         self.assertFalse(self.admin.has_delete_permission(None))  # no bulk "delete selected"
         self.assertFalse(self.admin.has_delete_permission(None, self.t2))
