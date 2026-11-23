@@ -43,9 +43,12 @@ class TestValidationUtils(unittest.TestCase):
                 with self.assertRaisesRegex(ValidationError,
                                             'Invalid string used for the schema name.'):
                     base._check_schema_name(schema_name)
+        # The fork's [a-z0-9] rule rejects these as well.
         for schema_name in ('$user2', 'my$user', '$'):
             with self.subTest(schema_name=schema_name):
-                self.assertIsNone(base._check_schema_name(schema_name))
+                with self.assertRaisesRegex(ValidationError,
+                                            'Invalid string used for the schema name.'):
+                    base._check_schema_name(schema_name)
 
     def test_check_schema_name_with_quote_or_statement_characters_is_invalid(self):
         for schema_name in ("tenant1', 'other", 'tenant1"; DROP SCHEMA other; --',
