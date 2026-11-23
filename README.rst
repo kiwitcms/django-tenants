@@ -22,6 +22,21 @@ https://github.com/kiwitcms/tenants/!
 Changelog
 =========
 
+v3.8.20261123 (23 Nov 2026)
+---------------------------
+
+- Security: backport from upstream v4.0.5. See
+  `GHSA-q7xr-949m-53qg <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-q7xr-949m-53qg>`_
+  and
+  `GHSA-8558-24hp-q3wq <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-8558-24hp-q3wq>`_
+- Security: backport from upstream v4.0.6. See
+  `GHSA-rmj3-rwfx-x6r2 <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-rmj3-rwfx-x6r2>`_
+- Security: backport from upstream v4.0.7. See
+  `GHSA-rh58-8mmc-gcfw <https://github.com/django-tenants/django-tenants/security/advisories/GHSA-rh58-8mmc-gcfw>`_
+- Cherry-pick upstream ``e933df4``: make ``search_path`` handling
+  driver-agnostic
+
+
 v3.8.2026112201 (22 Nov 2026)
 -----------------------------
 
